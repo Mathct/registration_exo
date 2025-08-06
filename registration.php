@@ -21,19 +21,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 
-
     if(empty($email)){
       $errors[] = "vous n'avez pas renseigné l'email";
     }
-    if(empty($password) || (empty($confirmpassword))){
-      $errors[] = "vous n'avez pas renseigné ou confirmé le password";
+    elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+      $errors[] = "format classique email non respecté";
+    }
+    elseif(strlen($email) > 50){
+      $errors[] = "l'email doit comporter moins de 50 caractères";
     }
 
-    if($password != $confirmpassword){
+  
+
+    if(empty($password)){
+      $errors[] = "vous n'avez pas renseigné le password";
+    }
+
+      // il faudra rajouter le regex pour mdp
+
+    elseif($password !== $confirmpassword){
       $errors[] = "vous n'avez pas correctement confirmé le password";
     }
+    elseif($password !== $confirmpassword){
+      $errors[] = "vous n'avez pas correctement confirmé le password";
+    }
+    elseif(strlen($password) <3){
+      $errors[] = "le mdp doit comporter plus de 3 caractères";
+    }
+    elseif(strlen($password) > 50){
+      $errors[] = "le mdp doit comporter moins de 50 caractères";
+    }
 
-    // Nettoyage des données
+
+    // Nettoyage des données et cryptage du medp
 
     if(empty($errors)){
 
@@ -42,6 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     
     
+    }
+
+    else
+    {
+        var_dump($errors); 
     }
 
     
@@ -61,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="assets/style/style.css">
 </head>
 <body>
 <main>
