@@ -3,7 +3,7 @@
 //logique de connexion à la base de données
 
 //information pour se connecter
-$host = "locahost";
+$host = "localhost";
 $port = 3306;
 $username = "root";
 $password = "";
@@ -35,8 +35,9 @@ function dbConnexion() {
         return $pdo;
 
     } catch (PDOException $e) {
-       
+       die("Erreur durant la connexion à la bd: ".$e->getMessage());
     }
 
 }
 
+dbConnexion();
