@@ -1,5 +1,7 @@
 <?php
 
+require_once 'config/database.php';
+
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -53,12 +55,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 
-    // Nettoyage des données et cryptage du medp
+    
 
     if(empty($errors)){
 
+        // Nettoyage des données
         $username = htmlspecialchars(trim($username));
         $email = htmlspecialchars(trim($email));
+
+
+        //envoi à la base de données
+        
+
 
     
     
