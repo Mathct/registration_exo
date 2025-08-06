@@ -39,5 +39,3 @@ function dbConnexion() {
     }
 
 }
-
-dbConnexion();
