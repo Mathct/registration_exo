@@ -97,7 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         }
 
-        
         $message = "Merci poour votre inscription ".$username;
 
     
