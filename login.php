@@ -34,8 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = dbConnexion();
 
         //verification que le compte existe
+        //preparation et execution de la requete
         $checkEmail =  $pdo->prepare("SELECT id FROM users WHERE email = ?");
         $checkEmail->execute([$email]);
+        //rowCount() permet juste de connaitre le nombre d'elements retournés
         if ($checkEmail->rowCount() == 0) {
             // le compte n'existe pas
             $errors[] = "Compte inexistant";
