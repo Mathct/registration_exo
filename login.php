@@ -8,7 +8,7 @@ $message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $email = $_POST['email'] ?? '';
+    $email = htmlspecialchars(trim($_POST['email'])) ?? '';
     $password = $_POST['password'] ?? '';
     
     
@@ -16,12 +16,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(empty($email)){
       $errors[] = "vous n'avez pas renseigné l'email";
     }
+    elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+      $errors[] = "format classique email non respecté";
+    }
+
+
     if(empty($password)){
       $errors[] = "vous n'avez pas renseigné le password";
     }
     
 
     if(empty($errors)){
+
+      
 
         // on lance la connexion à la BD
         $pdo = dbConnexion();
