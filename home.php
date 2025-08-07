@@ -3,4 +3,9 @@
 require_once 'config/database.php';
 session_start();
 
-echo "Hello world";
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+echo "Bienvenue " . $_SESSION['username'];
