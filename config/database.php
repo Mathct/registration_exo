@@ -2,22 +2,22 @@
 
 //logique de connexion à la base de données
 
-//information pour se connecter
-$host = "localhost";
-$port = 3306;
-$username = "root";
-$password = "";
-$dbname = "user_db";
 
-$charset = "utf8mb4"; // encodage
 
 //fonction qui crée et renvoi une connexion à la bd
 
 function dbConnexion() {
 
-    //pour acceder aux variables à l'interieur de la fonction.... on transforme les variables en global
-    global $host, $port, $username, $password, $dbname, $charset;
+    //information pour se connecter
+    $host = "localhost";
+    $port = 3306;
+    $username = "root";
+    $password = "";
+    $dbname = "user_db";
 
+    $charset = "utf8mb4"; // encodage
+
+    
     try {
 
         //parametres de connexion

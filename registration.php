@@ -2,6 +2,7 @@
 
 require_once 'config/database.php';
 
+
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -50,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     elseif(strlen($password) <3){
       $errors[] = "le mdp doit comporter plus de 3 caractères";
     }
-    elseif(strlen($password) > 50){
-      $errors[] = "le mdp doit comporter moins de 50 caractères";
+    elseif(strlen($password) > 20){
+      $errors[] = "le mdp doit comporter moins de 20 caractères";
     }
 
 
@@ -59,12 +60,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if(empty($errors)){
 
-        // Nettoyage des données
+        // Nettoyage des données (on ne nettoie pas le password car il sera cripté)
         $username = htmlspecialchars(trim($username));
         $email = htmlspecialchars(trim($email));
 
+        // on lance la connexion à la BD
+        $pdo = dbConnexion();
 
-        //envoi à la base de données
+        //verification que l'email est unique
+        //on prepare la requete SQL
+        $checkEmail =  $pdo->prepare("SELECT id FROM users WHERE email = ?");
+        //on execute la requete SQL
+        $checkEmail->execute([$email]);
+
+        //rowCount() permet juste de connaitre le nombre d'element retournés (pas le contenu.. le contenu doit etre fait avec un fetch)
+        if ($checkEmail->rowCount() > 0) {
+        // Email déjà utilisé
+          $errors[] = "Mail déjà utilisé";
+        }
+        else{
+          // haschage du mdp
+          $hashPassword = password_hash($password, PASSWORD_DEFAULT);
+          
+        }
+
         
 
 
@@ -99,6 +118,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <main>
 <div class="form-container">
+
+<?php
+  foreach ($errors as $error)
+  {
+    echo $error.'<br>';
+  }
+
+?>
+
     <h2>Inscription</h2>
     <form action="" method="POST">
       <label for="username">Name</label>
