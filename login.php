@@ -49,16 +49,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             //verification du password//
 
             //preparation et execution de la requete
-            $recupEmail = $pdo->prepare("SELECT password FROM users WHERE email = ?");
-            $recupEmail->execute([$email]);
+            $sql = "SELECT * FROM users WHERE email = ?";
+            $request = $pdo->prepare($sql);
+            $request->execute([$email]);
 
             //recuperation du resultat sous forme de tableau associatif
-            $hashEmail = $recupEmail->fetch(); 
-            //recuperation de la valeur souhaitée dans le tableau associatif
-            $hash = $hashEmail['password'];
-
+            $user = $request->fetch(); 
+            
             // on verifie si le password est le bon password_verify decripte le $hash
-            if (password_verify($password, $hash)) {
+            if (password_verify($password, $user['password'])) {
                 $message = "Connexion réussie !";
             } else {
                 $errors[] = "Mot de passe incorrect";
