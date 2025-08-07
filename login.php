@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             //recuperation de la valeur souhaitée dans le tableau associatif
             $hash = $hashEmail['password'];
 
-            // on verifie si le passwod est le bon password_verify decripte le $hash
+            // on verifie si le password est le bon password_verify decripte le $hash
             if (password_verify($password, $hash)) {
                 $message = "Connexion réussie !";
             } else {
