@@ -1,7 +1,7 @@
 <?php
 
 require_once 'config/database.php';
-
+session_start();
 
 $errors = [];
 $message = "";
@@ -28,43 +28,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if(empty($errors)){
 
-      
+      try{
 
         // on lance la connexion à la BD
         $pdo = dbConnexion();
 
-        //verification que le compte existe
         //preparation et execution de la requete
-        $checkEmail =  $pdo->prepare("SELECT id FROM users WHERE email = ?");
-        $checkEmail->execute([$email]);
-        //rowCount() permet juste de connaitre le nombre d'elements retournés
-        if ($checkEmail->rowCount() == 0) {
-            // le compte n'existe pas
-            $errors[] = "Compte inexistant";
-        }
+        $sql = "SELECT * FROM users WHERE email = ?";
+        $request = $pdo->prepare($sql);
+        $request->execute([$email]);
 
-        else
-        { 
-            
-            //verification du password//
+        //recuperation du resultat sous forme de tableau associatif
+        $user = $request->fetch(); 
 
-            //preparation et execution de la requete
-            $sql = "SELECT * FROM users WHERE email = ?";
-            $request = $pdo->prepare($sql);
-            $request->execute([$email]);
-
-            //recuperation du resultat sous forme de tableau associatif
-            $user = $request->fetch(); 
-            
-            // on verifie si le password est le bon password_verify decripte le $hash
+        if($user)
+        {
+          // on verifie si le password est le bon password_verify decripte le $hash
             if (password_verify($password, $user['password'])) {
                 $message = "Connexion réussie !";
+
+                $_SESSION["user_id"] = $user['id'];
+                $_SESSION["username"] = $user['username'];
+                $_SESSION["email"] = $user['email'];
+                $_SESSION["loggin"] = true;
+
+                // Redirige vers une autre page
+                header('Location: home.php');
+                exit();
+
             } else {
                 $errors[] = "Mot de passe incorrect";
             }
-       
+
         }
-    
+
+        else{ 
+          $errors[] = "Compte inexistant";
+        }
+
+      } catch (PDOException $e) {
+        $errors[] = "Erreur durant la connexion à la bd: ".$e->getMessage();
+      }
+             
     }
 
 }
