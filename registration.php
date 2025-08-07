@@ -4,6 +4,7 @@ require_once 'config/database.php';
 
 
 $errors = [];
+$message = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -81,19 +82,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         else{
           // haschage du mdp
           $hashPassword = password_hash($password, PASSWORD_DEFAULT);
-          
+
+          // on va injecter les données dans le BD
+
+          $sql = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
+
+          $newUser = $pdo->prepare($sql);
+
+          $newUser->execute([
+            ':username'  => $username,
+            ':email'      => $email,
+            ':password'   => $hashPassword,  // hashé avec password_hash()
+          ]);
+
         }
 
         
-
+        $message = "Merci poour votre inscription ".$username;
 
     
     
-    }
-
-    else
-    {
-        var_dump($errors); 
     }
 
     
@@ -123,6 +131,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   foreach ($errors as $error)
   {
     echo $error.'<br>';
+  }
+
+  if(!empty($message))
+  {
+    echo $message;
   }
 
 ?>
