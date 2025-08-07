@@ -62,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(empty($errors)){
 
         // Nettoyage des données (on ne nettoie pas le password car il sera cripté)
+        //Protège contre les attaques XSS (injection de JavaScript dans le HTML).
         $username = htmlspecialchars(trim($username));
         $email = htmlspecialchars(trim($email));
 
@@ -69,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = dbConnexion();
 
         //verification que l'email est unique
-        //on prepare la requete SQL
+        //on prepare la requete SQL afin d'éviter les attaques de type SQL Injection
         $checkEmail =  $pdo->prepare("SELECT id FROM users WHERE email = ?");
         //on execute la requete SQL
         $checkEmail->execute([$email]);

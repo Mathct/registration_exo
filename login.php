@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     
     
-    
+    // gestion des erreurs
     if(empty($email)){
       $errors[] = "vous n'avez pas renseigné l'email";
     }
