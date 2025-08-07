@@ -38,27 +38,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         { 
             
             //recuperation du mot de pass cripté dans la base de donnée
+
+            //preparation et execution de la requete
             $recupEmail = $pdo->prepare("SELECT password FROM users WHERE email = ?");
             $recupEmail->execute([$email]);
 
+            //recuperation du resultat sous forme de tableau associatif
             $hashEmail = $recupEmail->fetch(); 
-        
+            //recuperation de la valeur souhaitée
             $hash = $hashEmail['password'];
 
+            // on verifie si le passwod est le bon password_verify decripte le $hash
             if (password_verify($password, $hash)) {
                 $message = "Connexion réussie !";
             } else {
                 $errors[] = "Mot de passe incorrect";
             }
-
-
        
         }
     
-    
     }
-
-    
 
 }
 
