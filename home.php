@@ -49,7 +49,7 @@ if(isset($_GET['logout']) && $_GET['logout'] == 1)
 </head>
 <body>
 
-<?php echo "Bienvenue " . $username . "<br><br>"; ?>
+<?php echo "Bienvenue " . htmlspecialchars($username) . "<br><br>"; ?>
 
 <a href="home.php?logout=1" class="btn btn-danger">Se déconnecter</a>
 
